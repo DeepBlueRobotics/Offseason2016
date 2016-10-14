@@ -107,7 +107,7 @@ public class OI {
 
         // SmartDashboard Buttons
         SmartDashboard.putData("MainAutoMode", new MainAutoMode());
-        SmartDashboard.putData("AutoDrive", new AutoDrive());
+        SmartDashboard.putData("AutoDrive", new AutoDrive(0));
         SmartDashboard.putData("AutoTurn", new AutoTurn());
         SmartDashboard.putData("AutoDelay", new AutoDelay());
         SmartDashboard.putData("TeleopDrive", new TeleopDrive());
