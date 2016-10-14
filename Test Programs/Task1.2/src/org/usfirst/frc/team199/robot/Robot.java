@@ -26,12 +26,10 @@ public class Robot extends IterativeRobot {
     SendableChooser chooser;
 	
     
-    private static Encoder rightEncoder;
-    private static Encoder leftEncoder;
-    //private static SpeedController rightSpeed;
-    //private static SpeedController leftSpeed;
-    private static Talon rightMotor;
-    private static Talon leftMotor;
+    private static Encoder rightEncoder = new Encoder(0, 1);
+    private static Encoder leftEncoder = new Encoder(2, 3);
+    private static Talon rightMotor = new Talon(1);
+    private static Talon leftMotor = new Talon(0);
     private static RobotDrive robotDrive = new RobotDrive(leftMotor, rightMotor);
     private static Joystick rightJoy = new Joystick(1);
     private static Joystick leftJoy = new Joystick(2);
