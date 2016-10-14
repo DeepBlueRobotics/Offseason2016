@@ -28,12 +28,20 @@ public class Robot extends IterativeRobot {
     
     private static Encoder rightEncoder = new Encoder(0, 1);
     private static Encoder leftEncoder = new Encoder(2, 3);
-    private static Talon rightMotor = new Talon(1);
-    private static Talon leftMotor = new Talon(0);
-    private static RobotDrive robotDrive = new RobotDrive(leftMotor, rightMotor);
+    
+    private static Talon lMotor1 = new Talon(0);
+    private static Talon lMotor2 = new Talon(1);
+    private static Talon lMotor3 = new Talon(2);
+    
+    private static Talon rMotor1 = new Talon(3);
+    private static Talon rMotor2 = new Talon(4);
+    private static Talon rMotor3 = new Talon(5);
+    
+    //private static RobotDrive robotDrive = new RobotDrive(leftMotor, rightMotor);
+    
     private static Joystick rightJoy = new Joystick(1);
     private static Joystick leftJoy = new Joystick(2);
-    private static AnalogGyro gyro = new AnalogGyro(3);
+    private static AnalogGyro gyro = new AnalogGyro(6);
     
     private double totalDistance;
     private double totalDegrees;
@@ -63,7 +71,8 @@ public class Robot extends IterativeRobot {
      * PID driving forward/backward
      * */
     public void autoDrive(double speed){
-    	robotDrive.tankDrive(speed, speed);
+    	driveRight(speed);
+    	driveLeft(speed);
     }
     
     /**
@@ -71,7 +80,36 @@ public class Robot extends IterativeRobot {
      * */
     public void autoTurn(double angle){
     	int sign = (int) (angle/Math.abs(angle));
-    	robotDrive.tankDrive(sign, -sign);	
+    	driveLeft(sign);
+    	driveRight(-sign);
+    }
+    
+    /**
+     * drives all 3 right motors as one
+     * @param speed speed of right motors
+     * */
+    public void driveRight(double speed){
+    	rMotor1.set(speed);
+    	rMotor2.set(speed);
+    	rMotor3.set(speed);
+    }
+    
+    /**
+     * drives all 3 left motors as one
+     * @param speed speed of left motors
+     * */
+    public void driveLeft(double speed){
+    	lMotor1.set(speed);
+    	lMotor2.set(speed);
+    	lMotor3.set(speed);
+    }
+    
+    /**
+     * drive 6-motor robot using joysticks
+     * */
+    public void driveTeleop(){
+    	driveLeft(leftJoy.getThrottle());
+    	driveRight(rightJoy.getThrottle());
     }
     
     /**
@@ -97,6 +135,7 @@ public class Robot extends IterativeRobot {
     }
     
     /**
+     * use for PID
      * @param target target distance you want the robot to travel
      * @return necessary motor speed
      * */
@@ -109,6 +148,7 @@ public class Robot extends IterativeRobot {
     }
     
     /**
+     * use for PID
      * @param target target angle you want the robot to turn (in degrees)
      * @return necessary motor speed
      * */
@@ -193,7 +233,7 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-    	robotDrive.tankDrive(leftJoy.getThrottle(), rightJoy.getThrottle());
+    	driveTeleop();
     	update();
     	SmartDashboard.putNumber("encoder ratio", setEncoderRatio(12));
         
