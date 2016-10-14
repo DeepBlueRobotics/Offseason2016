@@ -42,18 +42,18 @@ public class AutoDrive extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.drivetrain.resetEncoder();
-    	Robot.drivetrain.resetIntegral();
     	Robot.drivetrain.drivePID.setTarget(target);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.drivetrain.driveAt(Robot.drivetrain.getPIDDrive(target), Robot.drivetrain.getPIDDrive(target));
+    	Robot.drivetrain.drivePID.update(Robot.drivetrain.getDistance());
+    	Robot.drivetrain.driveAt(Robot.drivetrain.drivePID.getOutput(), 0);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Robot.drivetrain.getDistance() >= target;
+        return Robot.drivetrain.drivePID.reachedTarget();
     }
 
     // Called once after isFinished returns true
