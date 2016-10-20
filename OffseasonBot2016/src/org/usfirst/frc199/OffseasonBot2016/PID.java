@@ -39,10 +39,10 @@ public class PID implements DashboardInterface {
 		this.name = name;
 		Robot.subsystems.add(this);
 		intervalTimer.start();
-		display("kP", getPref("kP"));
-		display("kI", getPref("kI"));
-		display("kD", getPref("kD"));
-		display("TestTarget", 0);
+		putNumber("kP", getPref("kP"));
+		putNumber("kI", getPref("kI"));
+		putNumber("kD", getPref("kD"));
+		putNumber("TestTarget", 0);
 	}
 	
 	/**
@@ -132,13 +132,13 @@ public class PID implements DashboardInterface {
 	}
 	
 	public void displayData() {
-		display("Error", error);
-		display("Target", target);
-		display("Input", input);
-		display("Output", output);
-		display("Interval", interval);
-		display("Rate", rate);
-		display("TotalError", totalError);
-		display("Reached Target", reachedTarget());
+		putNumber("Error", error);
+		putNumber("Target", target);
+		putNumber("Input", input);
+		putNumber("Output", output);
+		putNumber("Interval", interval);
+		putNumber("Rate", rate);
+		putNumber("TotalError", totalError);
+		putBoolean("Reached Target", reachedTarget());
 	}
 }

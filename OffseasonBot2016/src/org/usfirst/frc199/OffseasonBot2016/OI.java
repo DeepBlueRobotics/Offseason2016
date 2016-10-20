@@ -109,7 +109,7 @@ public class OI {
         SmartDashboard.putData("MainAutoMode", new MainAutoMode());
         SmartDashboard.putData("AutoDrive", new AutoDrive(0));
         SmartDashboard.putData("AutoTurn", new AutoTurn());
-        SmartDashboard.putData("AutoDelay", new AutoDelay());
+        SmartDashboard.putData("AutoDelay", new AutoDelay(0));
         SmartDashboard.putData("TeleopDrive", new TeleopDrive());
         SmartDashboard.putData("VisionAlign", new VisionAlign());
         SmartDashboard.putData("AutoShoot", new AutoShoot());

@@ -23,38 +23,21 @@ public interface DashboardInterface {
 	 */
 	public void displayData();
 	
-	/**
-	 * Displays a value on SmartDashboard with a modified key
-	 * 
-	 * @param key
-	 * @param value
-	 */
-	default void display(String key, Object value) {
-		key = getKey(key);
-		if (value instanceof String) {
-			SmartDashboard.putString(key, (String) value);
-		} else if (value instanceof Double || value instanceof Integer) {
-			SmartDashboard.putNumber(key, (double) value);
-		} else if (value instanceof Boolean) {
-			SmartDashboard.putBoolean(key, (boolean) value);
-		} else if (value instanceof Sendable) {
-			SmartDashboard.putData(key, (Sendable) value);
-		} else {
-			System.out.println(key + " = " + value);
-		}
-	}
 	
 	/*
 	 * Methods for displaying values with modified keys
 	 */
 	default void putNumber(String key, double value) {
-		SmartDashboard.putNumber(key, value);
+		SmartDashboard.putNumber(getKey(key), value);
 	}
 	default void putBoolean(String key, boolean value) {
-		SmartDashboard.putBoolean(key, value);
+		SmartDashboard.putBoolean(getKey(key), value);
 	}
 	default void putString(String key, String value) {
-		SmartDashboard.putString(key, value);
+		SmartDashboard.putString(getKey(key), value);
+	}
+	default void putSendable(String key, Sendable value) {
+		SmartDashboard.putData(getKey(key), value);
 	}
 	
 	/*

@@ -65,7 +65,7 @@ public class Robot extends IterativeRobot {
         
         for(DashboardInterface s: Robot.subsystems) {
     		if(!s.getKey("").substring(0, 4).equals("PID/")) {
-    			s.display("~TYPE~", "SubSystem");
+    			s.putString("~TYPE~", "SubSystem");
     		}
     	}
 
