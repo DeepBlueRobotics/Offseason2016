@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.ArrayList;
 
@@ -62,10 +63,11 @@ public class Robot extends IterativeRobot {
         subsystems.add(drivetrain);
         subsystems.add(intake);
         subsystems.add(shooter);
+        SmartDashboard.putNumber("shooter speed", 0);
         
         for(DashboardInterface s: Robot.subsystems) {
     		if(!s.getKey("").substring(0, 4).equals("PID/")) {
-    			s.display("~TYPE~", "SubSystem");
+    			s.putString("~TYPE~", "SubSystem");
     		}
     	}
 

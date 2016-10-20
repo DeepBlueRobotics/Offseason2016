@@ -12,6 +12,7 @@
 package org.usfirst.frc199.OffseasonBot2016.subsystems;
 
 import org.usfirst.frc199.OffseasonBot2016.DashboardInterface;
+import org.usfirst.frc199.OffseasonBot2016.PID;
 import org.usfirst.frc199.OffseasonBot2016.RobotMap;
 import org.usfirst.frc199.OffseasonBot2016.commands.*;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
@@ -58,6 +59,50 @@ public class Shooter extends Subsystem implements DashboardInterface {
 	@Override
 	public void displayData() {
 		
+	}
+	
+	public PID speed = new PID("ShooterSpeed");
+	
+	public boolean findShooterSpeedPID(){
+		//?? I know this (setTarget) will repeat every time
+		//the method is called, which is unnecessary,
+		//but where else would I do it? Do I need to?
+		//(I would assume so...)
+		speed.update(shooterEncoder.get());
+		if(speed.reachedTarget())
+			return true;
+		else return false;
+	}
+	
+	
+	
+	//load shooter (motor full)
+	//shooter motor (varying speed)
+	//hoodTiltPiston: toggle, keep track of position
+	
+	/**
+	 * loads the shooter
+	 * */
+	public void loadShooter(){
+		loaderMotor.set(1);
+	}
+	
+	/**
+	 * shoots the ball
+	 * */
+	public void shoot(double speed){
+		shooterMotor.set(speed);
+	}
+	
+	/**
+	 * sets the hood position
+	 * @param piston if true, piston is set up; if false, piston is set down
+	 * */
+	public void tiltHood(boolean piston){
+		if(piston)
+			hoodTiltPiston.set(DoubleSolenoid.Value.kForward);
+		else hoodTiltPiston.set(DoubleSolenoid.Value.kReverse);
+
 	}
 }
 
