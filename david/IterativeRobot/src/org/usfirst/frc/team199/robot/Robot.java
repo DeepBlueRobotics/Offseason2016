@@ -119,7 +119,7 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        drive.tankDrive(joystickl.getY(), joystickr.getY());
+        //drive.tankDrive(joystickl.getY(), joystickr.getY());
         leftMotor1.set(SmartDashboard.getNumber("speed"));
         leftMotor2.set(SmartDashboard.getNumber("speed"));
         leftMotor3.set(SmartDashboard.getNumber("speed"));
