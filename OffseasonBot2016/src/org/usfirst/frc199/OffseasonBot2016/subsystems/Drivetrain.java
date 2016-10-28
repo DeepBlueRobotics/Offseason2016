@@ -82,13 +82,24 @@ public class Drivetrain extends Subsystem implements DashboardInterface {
     	robotDrive.arcadeDrive(drive, turn);
     }
     public double getSpeed() {
-    	return (leftMotor.get() + rightMotor.get()) / 2;
+    	return (leftEncoder.getRate() + rightEncoder.getRate()) / 2;
     }
     
     
 	@Override
 	public void displayData() {
-		// TODO Auto-generated method stub
+		//Display any info that is useful
+		//Sensor values
+		
+		putNumber("Left encoder distance", leftEncoder.get());
+		putNumber("Right encoder distance", rightEncoder.get());
+		putNumber("Left encoder speed", leftEncoder.getRate());
+		putNumber("Right encoder speed", rightEncoder.getRate());
+		putNumber("Average speed", getSpeed());
+		putNumber("Average distance", getDistance());
+		putNumber("Gyro", gyro.getAngle());
+		putNumber("Left motor value", leftMotor.get());
+		putNumber("Right motor value", rightMotor.get());
 		
 	}
 }
