@@ -40,6 +40,8 @@ public class RobotMap {
     public static AnalogGyro drivetrainGyro;
     public static Encoder drivetrainLeftEncoder;
     public static Encoder drivetrainRightEncoder;
+    public static DigitalInput intakeTopHallEffect;
+    public static DigitalInput intakeBottomHallEffect;
     public static Compressor intakeCompressor;
     public static DoubleSolenoid intakePivotPiston;
     public static SpeedController intakeIntakeMotor;
@@ -77,6 +79,12 @@ public class RobotMap {
         LiveWindow.addSensor("Drivetrain", "Right Encoder", drivetrainRightEncoder);
         drivetrainRightEncoder.setDistancePerPulse(1.0);
         drivetrainRightEncoder.setPIDSourceType(PIDSourceType.kRate);
+        intakeTopHallEffect = new DigitalInput(7);
+        LiveWindow.addSensor("Intake", "TopHallEffect", intakeTopHallEffect);
+        
+        intakeBottomHallEffect = new DigitalInput(8);
+        LiveWindow.addSensor("Intake", "BottomHallEffect", intakeBottomHallEffect);
+        
         intakeCompressor = new Compressor(0);
         
         
