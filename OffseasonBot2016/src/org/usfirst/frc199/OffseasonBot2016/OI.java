@@ -60,8 +60,6 @@ public class OI {
     public JoystickButton runShooterButton;
     public JoystickButton loadShooterButton;
     public JoystickButton shootLowButton;
-    public JoystickButton tiltHighButton;
-    public JoystickButton tiltLowButton;
     public JoystickButton pivotIntakeButton;
     public JoystickButton intakeInButton;
     public JoystickButton intakeOutButton;
@@ -75,46 +73,37 @@ public class OI {
 
         manipulator = new Joystick(2);
         
-        visionAlignButton = new JoystickButton(manipulator, 1);
+        visionAlignButton = new JoystickButton(manipulator, 3);
         visionAlignButton.whenPressed(new VisionAlign());
-        intakeOutButton = new JoystickButton(manipulator, 1);
+        intakeOutButton = new JoystickButton(manipulator, 8);
         intakeOutButton.whileHeld(new RunIntakeOut());
-        intakeInButton = new JoystickButton(manipulator, 1);
+        intakeInButton = new JoystickButton(manipulator, 6);
         intakeInButton.whileHeld(new RunIntakeIn());
-        pivotIntakeButton = new JoystickButton(manipulator, 1);
+        pivotIntakeButton = new JoystickButton(manipulator, 4);
         pivotIntakeButton.whenPressed(new PivotIntake());
-        tiltLowButton = new JoystickButton(manipulator, 1);
-        tiltLowButton.whenPressed(new ShooterTiltDown());
-        tiltHighButton = new JoystickButton(manipulator, 1);
-        tiltHighButton.whenPressed(new ShooterTiltUp());
-        shootLowButton = new JoystickButton(manipulator, 1);
+        shootLowButton = new JoystickButton(manipulator, 2);
         shootLowButton.whileHeld(new ShootLow());
-        loadShooterButton = new JoystickButton(manipulator, 1);
+        loadShooterButton = new JoystickButton(manipulator, 5);
         loadShooterButton.whileHeld(new LoadShooter());
-        runShooterButton = new JoystickButton(manipulator, 1);
+        runShooterButton = new JoystickButton(manipulator, 7);
         runShooterButton.whileHeld(new RunShooter());
         rightJoy = new Joystick(1);
         
-        mainTiltButton = new JoystickButton(rightJoy, 1);
-        mainTiltButton.whileHeld(new ToggleShootingTilt());
-        shootButton = new JoystickButton(rightJoy, 1);
+        mainTiltButton = new JoystickButton(rightJoy, 2);
+        mainTiltButton.whenPressed(new ToggleShootingTilt());
+        shootButton = new JoystickButton(rightJoy, 5);
         shootButton.whenPressed(new AutoShoot());
         leftJoy = new Joystick(0);
         
-        intakeButton = new JoystickButton(leftJoy, 1);
+        intakeButton = new JoystickButton(leftJoy, 5);
         intakeButton.whenPressed(new AutoIntake());
 
 
         // SmartDashboard Buttons
         SmartDashboard.putData("MainAutoMode", new MainAutoMode());
         SmartDashboard.putData("AutoDrive", new AutoDrive(0));
-<<<<<<< HEAD
         SmartDashboard.putData("AutoTurn", new AutoTurn(0));
-        SmartDashboard.putData("AutoDelay", new AutoDelay());
-=======
-        SmartDashboard.putData("AutoTurn", new AutoTurn());
         SmartDashboard.putData("AutoDelay", new AutoDelay(0));
->>>>>>> 20449223a2bdcaf2f40fd7c92a6c7a25f913f5b1
         SmartDashboard.putData("TeleopDrive", new TeleopDrive());
         SmartDashboard.putData("VisionAlign", new VisionAlign());
         SmartDashboard.putData("AutoShoot", new AutoShoot());
@@ -122,8 +111,6 @@ public class OI {
         SmartDashboard.putData("LoadShooter", new LoadShooter());
         SmartDashboard.putData("ShootLow", new ShootLow());
         SmartDashboard.putData("ToggleShootingTilt", new ToggleShootingTilt());
-        SmartDashboard.putData("ShooterTiltUp", new ShooterTiltUp());
-        SmartDashboard.putData("ShooterTiltDown", new ShooterTiltDown());
         SmartDashboard.putData("AutoIntake", new AutoIntake());
         SmartDashboard.putData("PivotIntake", new PivotIntake());
         SmartDashboard.putData("RunIntakeIn", new RunIntakeIn());
