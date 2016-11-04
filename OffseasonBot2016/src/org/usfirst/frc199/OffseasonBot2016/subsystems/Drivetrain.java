@@ -49,6 +49,9 @@ public class Drivetrain extends Subsystem implements DashboardInterface {
     public PID drivePID = new PID("drivePID");
     public PID turnPID = new PID("turnPID");
 
+    public double prevTurn = 0;
+    double driveSpeed, driveAngle = 0;
+    
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
@@ -78,10 +81,14 @@ public class Drivetrain extends Subsystem implements DashboardInterface {
     	return (leftEncoder.get() + rightEncoder.get()) / 2;
     }
     public void driveAt(double drive, double turn) {
+    	prevTurn = turn;
     	robotDrive.arcadeDrive(drive, turn);
     }
     public double getSpeed() {
     	return (leftEncoder.getRate() + rightEncoder.getRate()) / 2;
+    }
+    public double avgMotorSetSpeed() {
+    	return (leftMotor.get() + rightMotor.get()) /2;
     }
     
     
@@ -101,5 +108,26 @@ public class Drivetrain extends Subsystem implements DashboardInterface {
 		putNumber("Right motor value", rightMotor.get());
 		
 	}
+	public void gradualDrive(double targetSpeed, double targetTurn) {
+		driveSpeed = 0;
+		driveAngle = 0;
+		if(avgMotorSetSpeed() < targetSpeed) {
+			driveSpeed = avgMotorSetSpeed() + 0.05;
+		} else if(avgMotorSetSpeed() > targetSpeed){
+			driveSpeed = avgMotorSetSpeed() - 0.05;
+		} else if(avgMotorSetSpeed() == targetSpeed) {
+			driveSpeed = avgMotorSetSpeed();
+		}
+		if(prevTurn < targetTurn) {
+			driveAngle = prevTurn + 0.05;
+		} else if(prevTurn > targetTurn) {
+			driveAngle = prevTurn - 0.05;
+		} else if(prevTurn == targetTurn) {
+			driveAngle = prevTurn;
+		}
+//		prevTurn = driveAngle;
+		driveAt(driveSpeed, driveAngle);		
+	}
+
 }
 
