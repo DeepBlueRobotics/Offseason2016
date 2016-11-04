@@ -49,7 +49,6 @@ public class Drivetrain extends Subsystem implements DashboardInterface {
     public PID drivePID = new PID("drivePID");
     public PID turnPID = new PID("turnPID");
 
-
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
