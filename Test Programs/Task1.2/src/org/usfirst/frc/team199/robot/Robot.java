@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
@@ -24,24 +25,27 @@ public class Robot extends IterativeRobot {
     final String customAuto = "My Auto";
     String autoSelected;
     SendableChooser chooser;
-	
+    PowerDistributionPanel panel = new PowerDistributionPanel();	
     
-    private static Encoder rightEncoder = new Encoder(0, 1);
+    private static Encoder rightEncoder = new Encoder(1, 0);
     private static Encoder leftEncoder = new Encoder(2, 3);
     
-    private static Talon lMotor1 = new Talon(0);
-    private static Talon lMotor2 = new Talon(1);
-    private static Talon lMotor3 = new Talon(2);
+//    private static Talon lMotor1 = new Talon(3);
+//    private static Talon lMotor2 = new Talon(4);
+//    private static Talon lMotor3 = new Talon(5);
     
-    private static Talon rMotor1 = new Talon(3);
-    private static Talon rMotor2 = new Talon(4);
-    private static Talon rMotor3 = new Talon(5);
+    private static Talon lMotor1 = new Talon(0);
+    private static Talon rMotor1 = new Talon(1);
+    private RobotDrive drive = new RobotDrive(lMotor1, rMotor1);
+//    private static Talon rMotor3 = new Talon(2);
     
     //private static RobotDrive robotDrive = new RobotDrive(leftMotor, rightMotor);
+	Timer tim = new Timer();
+
     
     private static Joystick rightJoy = new Joystick(1);
     private static Joystick leftJoy = new Joystick(2);
-    private static AnalogGyro gyro = new AnalogGyro(6);
+    private static AnalogGyro gyro = new AnalogGyro(0);
     
     private double totalDistance;
     private double totalDegrees;
@@ -51,6 +55,9 @@ public class Robot extends IterativeRobot {
     private double kdDegrees;
     private double kiDistance;
     private double kiDegrees;
+    private double angle;
+    private boolean resetTim = false;
+    private double rate;
     
     /**
      * Updates the value of the encoder in SmartDashboard
@@ -58,21 +65,44 @@ public class Robot extends IterativeRobot {
      * */
     public void update(){
     	SmartDashboard.putNumber("encoder", getEncoder());
+    	SmartDashboard.putNumber("right encoder", rightEncoder.get());
+    	SmartDashboard.putNumber("left encoder", leftEncoder.get());
+    	SmartDashboard.putNumber("Left Encoder Speed", rightEncoder.getRate());
+    	SmartDashboard.putNumber("Right Encoder Speed", leftEncoder.getRate());
+    	SmartDashboard.putNumber("Port0 Current", panel.getCurrent(0));
+    	SmartDashboard.putNumber("Port1 Current", panel.getCurrent(1));
+    	SmartDashboard.putNumber("Port2 Current", panel.getCurrent(2));
+    	SmartDashboard.putNumber("Port3 Current", panel.getCurrent(3));
+    	SmartDashboard.putNumber("Port4 Current", panel.getCurrent(4));
+    	SmartDashboard.putNumber("Port5 Current", panel.getCurrent(5));
+    	SmartDashboard.putNumber("Port6 Current", panel.getCurrent(6));
+    	SmartDashboard.putNumber("Port7 Current", panel.getCurrent(7));
+    	SmartDashboard.putNumber("Port8 Current", panel.getCurrent(8));
+    	SmartDashboard.putNumber("Port9 Current", panel.getCurrent(9));
+    	SmartDashboard.putNumber("Port10 Current", panel.getCurrent(10));
+    	SmartDashboard.putNumber("Port11 Current", panel.getCurrent(11));
+    	SmartDashboard.putNumber("Port12 Current", panel.getCurrent(12));
+    	SmartDashboard.putNumber("Port13 Current", panel.getCurrent(13));
+    	SmartDashboard.putNumber("Port14 Current", panel.getCurrent(14));
+    	SmartDashboard.putNumber("Port15 Current", panel.getCurrent(15));
+    	
     }
     
     /**
      * @return the ratio of distance traveled to the encoder's value
      * */
-    public double setEncoderRatio(double distanceTraveled){
-    	return  distanceTraveled/SmartDashboard.getNumber("encoder");
+    public double setLeftEncoderRatio(double distanceTraveled){
+    	return  distanceTraveled/SmartDashboard.getNumber("left encoder");
+    }
+    public double setRightEncoderRatio(double distanceTraveled){
+    	return  distanceTraveled/SmartDashboard.getNumber("right encoder");
     }
     
     /**
      * PID driving forward/backward
      * */
     public void autoDrive(double speed){
-    	driveRight(speed);
-    	driveLeft(speed);
+    	drive.tankDrive(speed, speed);
     }
     
     /**
@@ -80,36 +110,50 @@ public class Robot extends IterativeRobot {
      * */
     public void autoTurn(double angle){
     	int sign = (int) (angle/Math.abs(angle));
-    	driveLeft(sign);
-    	driveRight(-sign);
+    	drive.tankDrive(sign, -sign);
     }
     
     /**
      * drives all 3 right motors as one
      * @param speed speed of right motors
      * */
-    public void driveRight(double speed){
-    	rMotor1.set(speed);
-    	rMotor2.set(speed);
-    	rMotor3.set(speed);
-    }
+//    public void driveRight(double speed){
+//    	rMotor1.set(speed);
+//    	rMotor2.set(speed);
+//    	rMotor3.set(speed);
+//    }
     
     /**
      * drives all 3 left motors as one
      * @param speed speed of left motors
      * */
-    public void driveLeft(double speed){
-    	lMotor1.set(speed);
-    	lMotor2.set(speed);
-    	lMotor3.set(speed);
-    }
+//    public void driveLeft(double speed){
+//    	lMotor1.set(speed);
+//    	lMotor2.set(speed);
+//    	lMotor3.set(speed);
+//    }
+    /**
+     * Drives an individual motor
+     * @param port port of motor driven*/
+//    public void driveIndividualMotor(int port){
+//    	switch (port) {
+//    	case 0: lMotor1.set(.2); break;
+//    	case 1: lMotor2.set(.2); break;
+//    	case 2: lMotor3.set(.2); break;
+//    	case 3: rMotor1.set(.2); break;
+//    	case 4: rMotor2.set(.2); break;
+//    	case 5: rMotor3.set(.2); break;
+//    	default: driveRight(0); driveLeft(0); break;
+//    	}
+//    }
     
     /**
      * drive 6-motor robot using joysticks
      * */
     public void driveTeleop(){
-    	driveLeft(leftJoy.getThrottle());
-    	driveRight(rightJoy.getThrottle());
+//    	driveLeft(leftJoy.getThrottle());
+//    	driveRight(rightJoy.getThrottle());
+    	drive.tankDrive(leftJoy.getY(), rightJoy.getY());
     }
     
     /**
@@ -172,6 +216,14 @@ public class Robot extends IterativeRobot {
         kiDegrees = SmartDashboard.getNumber("ki Degrees");
     }
     
+    public void gyroDrift() {
+    	if(tim.get() < 3) {
+    		angle = gyro.getAngle();
+    	}
+    	rate = gyro.getAngle() / tim.get();
+    	SmartDashboard.putNumber("rate of gyro drift", rate);
+    }
+    
     
     /**
      * This function is run when the robot is first started up and should be
@@ -193,6 +245,10 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("target angle", 0);
         SmartDashboard.putNumber("target distance", 0);
         
+        SmartDashboard.putNumber("motor port", 0);
+        SmartDashboard.putBoolean("joyRide", false);
+        
+        tim.reset();
     }
     
 	/**
@@ -233,10 +289,33 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-    	driveTeleop();
+//    	driveTeleop();
+//    	driveIndividualMotor((int)SmartDashboard.getNumber("motor port"));
     	update();
-    	SmartDashboard.putNumber("encoder ratio", setEncoderRatio(12));
-        
+    	SmartDashboard.putNumber("left encoder ratio", setLeftEncoderRatio(24));
+    	SmartDashboard.putNumber("right encoder ratio", setRightEncoderRatio(24));
+    	SmartDashboard.putNumber("gyro", getGyro());
+    	SmartDashboard.putNumber("Left Joy", leftJoy.getY());
+    	SmartDashboard.putNumber("Right Joy", rightJoy.getY());
+    	
+//    	driveLeft(SmartDashboard.getNumber("motor port"));
+//    	driveRight(SmartDashboard.getNumber("motor port"));
+    	if(SmartDashboard.getBoolean("joyRide")) {
+    		drive.arcadeDrive(leftJoy.getY(), rightJoy.getX());
+    	} else {
+    		drive.tankDrive(-SmartDashboard.getNumber("motor port"), -SmartDashboard.getNumber("motor port"));
+    	}
+    	
+    	
+    	
+//        if(SmartDashboard.getBoolean("test gyro drift")) {
+//        	if(!resetTim) {
+//        		tim.reset();
+//        		resetTim = !resetTim;
+//        	}
+//        	gyroDrift();
+//        	
+//        }
     }
     
     /**
