@@ -2,6 +2,7 @@
 package org.usfirst.frc.team199.robot;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -10,6 +11,7 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -37,6 +39,7 @@ public class Robot extends IterativeRobot {
     private static Talon lMotor1 = new Talon(0);
     private static Talon rMotor1 = new Talon(1);
     private RobotDrive drive = new RobotDrive(lMotor1, rMotor1);
+    private static DoubleSolenoid doubleSol = new DoubleSolenoid(1, 2);
 //    private static Talon rMotor3 = new Talon(2);
     
     //private static RobotDrive robotDrive = new RobotDrive(leftMotor, rightMotor);
@@ -45,6 +48,8 @@ public class Robot extends IterativeRobot {
     
     private static Joystick rightJoy = new Joystick(1);
     private static Joystick leftJoy = new Joystick(2);
+    private static JoystickButton joyButton = new JoystickButton(rightJoy, 1);
+    boolean alreadyPressed = false;
     private static AnalogGyro gyro = new AnalogGyro(0);
     
     private double totalDistance;
@@ -114,6 +119,17 @@ public class Robot extends IterativeRobot {
     }
     
     /**
+     * toggle solenoid state
+     */
+    public void shiftGears(){
+    	if (doubleSol.get() == DoubleSolenoid.Value.kForward) {
+    		doubleSol.set(DoubleSolenoid.Value.kReverse);
+    	} else {
+    		doubleSol.set(DoubleSolenoid.Value.kForward);
+    	}
+    }
+    
+    /**
      * drives all 3 right motors as one
      * @param speed speed of right motors
      * */
@@ -155,6 +171,7 @@ public class Robot extends IterativeRobot {
 //    	driveRight(rightJoy.getThrottle());
     	drive.tankDrive(leftJoy.getY(), rightJoy.getY());
     }
+    
     
     /**
      * @return the value of the gyroscope
@@ -306,7 +323,14 @@ public class Robot extends IterativeRobot {
     		drive.tankDrive(-SmartDashboard.getNumber("motor port"), -SmartDashboard.getNumber("motor port"));
     	}
     	
-    	
+    	if (joyButton.get()) {
+    		if (!alreadyPressed) {
+    			shiftGears();
+    			alreadyPressed = true;
+    		}
+    	} else {
+    		alreadyPressed = false;
+    	}
     	
 //        if(SmartDashboard.getBoolean("test gyro drift")) {
 //        	if(!resetTim) {
