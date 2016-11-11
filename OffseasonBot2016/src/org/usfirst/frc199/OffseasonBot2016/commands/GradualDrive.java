@@ -51,6 +51,7 @@ public class GradualDrive extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+    	Robot.drivetrain.driveAt(0, 0);
     }
 
     // Called when another command which requires one or more of the same
